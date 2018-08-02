@@ -19,6 +19,9 @@ namespace FPS
     public partial class Transactions_View : Form
     {
         delegate void StringArgReturningVoidDelegate(Button btn, string lbl);
+        delegate void SetLabelTextCallback(Label label_id, string id);
+        delegate void SetButtonColorCallback(Button btn, Color color);
+        delegate void SetButtonVisibleCallback(Button btn, bool visiblity);
 
         public static Transactions_View tv;
        // System.Timers.Timer process = new System.Timers.Timer();
@@ -154,12 +157,18 @@ namespace FPS
             ButtonVisibility(previous_day, false);
             ButtonVisibility(next_day, true);
 
+
+
             lblMonth = month_year_lbl.Text.ToString().Split(',')[0];
+
+            
 
             int m = VerifyMonth(lblMonth);
             m_inc_dec = m-1;
             m_inc_dec++;
 
+
+          
             if (m_inc_dec == 11)
             {
                 ButtonVisibility(next_month, false);
@@ -184,7 +193,11 @@ namespace FPS
                 date_formate = (m_inc_dec + 1) + "/" + day_lbl.Text.ToString() + "/2018";
             }
 
-            
+            if (m + 1 == Convert.ToInt32(DateTime.Now.ToString("MM")))
+            {
+
+                ButtonVisibility(next_month, false);
+            }
 
 
 
@@ -245,6 +258,11 @@ namespace FPS
 
         private void next_day_Click(object sender, EventArgs e)
         {
+            if ((month_year_lbl.Text.ToString().Split(',')[0] == getMonth(DateTime.Now.ToString("MM"))) && (Convert.ToInt32(day_lbl.Text)+1==Convert.ToInt32(DateTime.Now.ToString("dd"))))
+            {
+
+                ButtonVisibility(next_day, false);
+            }
             day_inc_dec = Convert.ToInt32(day_lbl.Text.ToString());
 
             day_inc_dec++;
@@ -274,10 +292,10 @@ namespace FPS
                 }
             }
             else {
-                if (DateTime.IsLeapYear(Convert.ToInt32(month_year_lbl.Text.ToString().Split(',')[1])))
+                if (DateTime.IsLeapYear(2018))
                 {
 
-                    if (day_inc_dec >= 28)
+                    if (day_inc_dec >= 29)
                     {
                         ButtonVisibility(next_day, false);
                     }
@@ -285,7 +303,7 @@ namespace FPS
                 }
                 else {
 
-                    if (day_inc_dec >= 29)
+                    if (day_inc_dec >= 28)
                     {
                         ButtonVisibility(next_day, false);
                     }
@@ -671,8 +689,21 @@ namespace FPS
 
         public static void SetButtonColor(Button btn, Color color)
         {
-            btn.BackColor = color;
-            btn.FlatAppearance.MouseOverBackColor = color;
+
+            if (btn.InvokeRequired)
+            {
+                SetButtonColorCallback d = new SetButtonColorCallback(SetButtonColor);
+                tv.Invoke(d, new object[] { btn, color });
+
+            }
+            else
+            {
+                btn.BackColor = color;
+                btn.FlatAppearance.MouseOverBackColor = color;
+
+
+            }
+          
         }
 
 
@@ -699,6 +730,7 @@ namespace FPS
 
         private void Transactions_View_Load(object sender, EventArgs e)
         {
+            
 
             for (int i = 0; i < lbl_arr.Length; i++) {
 
@@ -706,12 +738,12 @@ namespace FPS
             }
 
             not_avail.Visible = false;
-           /* var dateAndTime = DateTime.Now;
+            var dateAndTime = DateTime.Now;
             int yearint = dateAndTime.Year;
             int monthint = dateAndTime.Month;
-            int dayint = dateAndTime.Day;*/
+            int dayint = dateAndTime.Day;
 
-            //string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
+            string dtformat=string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
 
             //MessageBox.Show(dtformat + "");
 
@@ -720,7 +752,7 @@ namespace FPS
             previous_btn.Visible = false;
 
 
-            UpdateCompletedTransView();
+            GetChooseTransations(dtformat);
            
 
 
@@ -749,7 +781,13 @@ namespace FPS
          
             day_lbl.Text = day;
 
-            
+            if ((month_year_lbl.Text.ToString().Split(',')[0] == getMonth(DateTime.Now.ToString("MM"))) && (Convert.ToInt32(day_lbl.Text) == Convert.ToInt32(DateTime.Now.ToString("dd"))))
+            {
+
+                ButtonVisibility(next_day, false);
+                ButtonVisibility(next_month, false);
+                
+            }
 
 
 
@@ -864,6 +902,22 @@ namespace FPS
                     tv.UpdateTransactionId(lbl_arr[iIndex], DB.lCompletedTrans[iIndex].sTranId);
                 }
             }
+
+            if (DB.lCompletedTrans.Count <= 6 * tv.iPage)
+            {
+
+                tv.ButtonVisibility(tv.next_btn, false);
+            }
+            if (DB.lCompletedTrans.Count >= 6 * tv.iPage)
+            {
+
+                tv.ButtonVisibility(tv.next_btn, true);
+            }
+
+            if (tv.iPage == 1)
+            {
+                tv.ButtonVisibility(tv.previous_btn, false);
+            }
             dbCmd.Dispose();
             drRecordSet.Dispose();
             SQL_SERVER.Close_Sql_Sever_Conn();
@@ -871,8 +925,23 @@ namespace FPS
 
         public  void UpdateTransactionId(Label label_id, string id)
         {
-            label_id.Text = id;
+            //label_id.Text = id;
+
+            if (label_id.InvokeRequired)
+            {
+                SetLabelTextCallback d = new SetLabelTextCallback(UpdateTransactionId);
+                this.Invoke(d, new object[] { label_id, id });
+
+            }
+            else
+            {
+                label_id.Text = id;
+
+
+            }
         }
+
+
 
 
         private void SetTransactionsDetails(string transac_id)
@@ -969,7 +1038,20 @@ namespace FPS
 
         private void ButtonVisibility(Button btn,bool visiblity){
 
-            btn.Visible = visiblity;
+            if (btn.InvokeRequired)
+            {
+                SetButtonVisibleCallback d = new SetButtonVisibleCallback(ButtonVisibility);
+                tv.Invoke(d, new object[] { btn, visiblity });
+
+            }
+            else
+            {
+                btn.Visible = visiblity;
+
+
+            }
+            
+          
         }
 
         int monthNum;

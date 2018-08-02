@@ -470,7 +470,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(105, 43);
             this.button2.TabIndex = 0;
-            this.button2.Text = "Refresh";
+            this.button2.Text = "Show All Transactions";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.Refresh_btn_Click);
             // 
