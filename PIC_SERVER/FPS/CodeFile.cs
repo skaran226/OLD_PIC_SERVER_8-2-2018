@@ -5398,7 +5398,7 @@ namespace FPS
 
                 Debug.WriteLine(sReceipt);
 
-                MessageBox.Show(sReceipt + "");
+                //MessageBox.Show(sReceipt + "");
             }
             else
             {
