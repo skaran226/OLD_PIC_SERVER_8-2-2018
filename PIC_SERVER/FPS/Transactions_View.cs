@@ -51,7 +51,7 @@ namespace FPS
      
         public static bool IsPrintable=false;
 
-        static TimerCallback timer_updateTransaction = new TimerCallback(UpdateTrans);
+       /* static TimerCallback timer_updateTransaction = new TimerCallback(UpdateTrans);
 
 
         static System.Threading.Timer GenerateEOD_report_stateTimer = new System.Threading.Timer(timer_updateTransaction, null, 5000,5000);
@@ -63,14 +63,19 @@ namespace FPS
 
                 Debug.WriteLine("DB.IsCompltedTransaction:" + DB.IsCompltedTransaction);
 
-                
-                UpdateCompletedTransView();
+                var dateAndTime = DateTime.Now;
+                int yearint = dateAndTime.Year;
+                int monthint = dateAndTime.Month;
+                int dayint = dateAndTime.Day;
+
+                string dtformat = string.Format("{0}/{1}/{2}", monthint, dayint, yearint);
+                tv.GetChooseTransations(dtformat);
                 
 
                 DB.IsCompltedTransaction = false;
             }
             Debug.WriteLine("DB.IsCompltedTransaction:" + DB.IsCompltedTransaction);
-        }
+        }*/
         
        /* private void UpdateTrans(object sender, System.Timers.ElapsedEventArgs e)
         {
