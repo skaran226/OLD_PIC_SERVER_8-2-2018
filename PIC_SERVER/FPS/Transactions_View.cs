@@ -22,6 +22,9 @@ namespace FPS
         delegate void SetLabelTextCallback(Label label_id, string id);
         delegate void SetButtonColorCallback(Button btn, Color color);
         delegate void SetButtonVisibleCallback(Button btn, bool visiblity);
+        delegate void SetButtonUpdateProp();
+        delegate void SetButtonIndex(int index);
+        delegate void SetLabelVisibleCallBack(Label not_avail, bool p);
 
         public static Transactions_View tv;
        // System.Timers.Timer process = new System.Timers.Timer();
@@ -51,7 +54,7 @@ namespace FPS
      
         public static bool IsPrintable=false;
 
-       /* static TimerCallback timer_updateTransaction = new TimerCallback(UpdateTrans);
+        static TimerCallback timer_updateTransaction = new TimerCallback(UpdateTrans);
 
 
         static System.Threading.Timer GenerateEOD_report_stateTimer = new System.Threading.Timer(timer_updateTransaction, null, 5000,5000);
@@ -75,7 +78,7 @@ namespace FPS
                 DB.IsCompltedTransaction = false;
             }
             Debug.WriteLine("DB.IsCompltedTransaction:" + DB.IsCompltedTransaction);
-        }*/
+        }
         
        /* private void UpdateTrans(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -650,7 +653,18 @@ namespace FPS
 
             foreach (Button btn in btnarr)
             {
-                btn.BackColor = Color.White;
+
+                if (btn.InvokeRequired)
+                {
+                    SetButtonIndex d = new SetButtonIndex(SetButton);
+                    tv.Invoke(d, new object[] { });
+
+                }
+                else {
+                    btn.BackColor = Color.White;
+                
+                }
+                
 
             }
 
@@ -1009,10 +1023,25 @@ namespace FPS
 
             foreach (Button btn in btnarr)
             {
-                btn.Text = "";
-                btn.BackColor = Color.White;
-                btn.FlatAppearance.MouseOverBackColor = Color.White;
+
+
+                if (btn.InvokeRequired)
+                {
+                    SetButtonUpdateProp d = new SetButtonUpdateProp(ClearButtonTexts);
+                    tv.Invoke(d, new object[] { });
+
+                }
+                else
+                {
+                    btn.Text = "";
+                    btn.BackColor = Color.White;
+                    btn.FlatAppearance.MouseOverBackColor = Color.White;
+
+
+                }
             }
+
+
         }
 
         private void ClearSelection()
@@ -1023,8 +1052,20 @@ namespace FPS
             foreach (Button btn in btnarr)
             {
 
-                btn.BackColor = Color.White;
-                btn.FlatAppearance.MouseOverBackColor = Color.White;
+                if (btn.InvokeRequired)
+                {
+                    SetButtonUpdateProp d = new SetButtonUpdateProp(ClearSelection);
+                    tv.Invoke(d, new object[] {  });
+
+                }
+                else
+                {
+                    btn.BackColor = Color.White;
+                    btn.FlatAppearance.MouseOverBackColor = Color.White;
+
+
+                }
+
             }
         }
 
@@ -1270,7 +1311,7 @@ namespace FPS
                     }
                 }
 
-                not_avail.Visible = false;
+                SetLabelVisible(not_avail,false);
                 iPage = 1;
 
                 if (DB.lCompletedTrans.Count <= 6 * iPage)
@@ -1321,6 +1362,19 @@ namespace FPS
             drRecordSet.Dispose();
             SQL_SERVER.Close_Sql_Sever_Conn();
 
+        }
+
+        private void SetLabelVisible(Label not_avail, bool p)
+        {
+            if (not_avail.InvokeRequired)
+            {
+
+                SetLabelVisibleCallBack d = new SetLabelVisibleCallBack(SetLabelVisible);
+                tv.Invoke(d, new object[] { not_avail, p });
+            }
+            else {
+                not_avail.Visible = false;
+            }
         }
 
         private void Refresh_btn_Click(object sender, EventArgs e)
