@@ -559,7 +559,7 @@ namespace FPS
 
                     Debug.WriteLine(sReceipt);
 
-                   // MessageBox.Show(sReceipt + "");
+                    //MessageBox.Show(sReceipt + "");
 
                     dbCmd.Dispose();
                     drRecordSet.Dispose();

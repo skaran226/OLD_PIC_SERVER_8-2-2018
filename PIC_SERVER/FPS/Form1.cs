@@ -792,7 +792,7 @@ namespace FPS
           Config_AutoEOD();
          // new TRAN(1, 2, 3, "1238765", "11").Authorize("1238765", 40);
 
-            /*TRAN_MGR.Create(2,2,"12352563423","12346358");
+           /* TRAN_MGR.Create(2,2,"12352563423","12346358");
             TRAN t1 = new TRAN(0, 2, 2, "12352563423", "12346358");
            t1.Authorize("12352563423", 60);
            t1.SalesReport("1", "14", "40", "20");

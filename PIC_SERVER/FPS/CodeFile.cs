@@ -4329,7 +4329,7 @@ namespace FPS
                 },
                  null, 5000, System.Threading.Timeout.Infinite); // you can change timer
 
-               MessageBox.Show(sReceipt + "");
+               //MessageBox.Show(sReceipt + "");
             }
             else
             {
@@ -5398,7 +5398,7 @@ namespace FPS
 
                 Debug.WriteLine(sReceipt);
 
-               // MessageBox.Show(sReceipt + "");
+                //MessageBox.Show(sReceipt + "");
             }
             else
             {
