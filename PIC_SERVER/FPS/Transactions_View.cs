@@ -1332,7 +1332,7 @@ namespace FPS
             }
             else {
                /* Display.ShowMessageBox("Not Available Selected date Transations", 4);*/
-                not_avail.Visible = true;
+                tv.SetLabelVisible(not_avail, true);
                 not_avail.Text = "Data Not Available";
                 DB.lCompletedTrans.Clear();
                 ClearButtonTexts();
