@@ -977,7 +977,7 @@ namespace FPS
 
             //sQuery = "SELECT COMPLETED_TIME, PIC, PUMP, DEPOSIT, PURCHASE, PRICE, CHANGE, GRADE, VOLUME, SHOW_TIME, TRAN_ID FROM TRANSACTIONS ORDER BY COMPLETED_TIME DESC";
 
-            string sQuery = "SELECT  PUMP, DEPOSIT, VOLUME, SHOW_TIME, TRAN_ID,CHANGE FROM TRANSACTIONS WHERE TRAN_ID LIKE '%" + transac_id + "%' ORDER BY COMPLETED_TIME DESC;";
+            string sQuery = "SELECT  PUMP, DEPOSIT,PURCHASE, VOLUME, SHOW_TIME, TRAN_ID,CHANGE FROM TRANSACTIONS WHERE TRAN_ID LIKE '%" + transac_id + "%' ORDER BY COMPLETED_TIME DESC;";
             dbCmd = SQL_SERVER.Set_Sql_Server_Cmd(sQuery);
 
             drRecordSet = dbCmd.ExecuteReader();
@@ -994,12 +994,16 @@ namespace FPS
                 {
 
                     pump_no.Text = drRecordSet["PUMP"].ToString();
-                    deposit.Text = drRecordSet["DEPOSIT"].ToString();
+                    deposit.Text = drRecordSet["DEPOSIT"].ToString()+"$";
 
-                    change.Text = drRecordSet["CHANGE"].ToString();
+                    change.Text = drRecordSet["CHANGE"].ToString()+"$";
 
-                    gal.Text = drRecordSet["VOLUME"].ToString();
+                    gal.Text = drRecordSet["VOLUME"].ToString()+" gal";
                     date_time.Text = drRecordSet["SHOW_TIME"].ToString();
+                    var cultureInfo = new System.Globalization.CultureInfo("en-US");
+                    double purchage = Convert.ToDouble(drRecordSet["PURCHASE"].ToString(), cultureInfo);
+                    double deposite = Convert.ToDouble(drRecordSet["DEPOSIT"].ToString(), cultureInfo);
+                    total.Text = (deposite - purchage).ToString();
 
 
 
